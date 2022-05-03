@@ -1,3 +1,4 @@
+import Link from '@src/components/Link/Link';
 import { pageHOC } from '@src/components/pageHOC/pageHOC';
 
 
@@ -48,7 +49,7 @@ function CombineScreen({ items, content }) {
       <h2>{content.status}!</h2>
       <p>{content.description}!</p>
 
-      <a href='/'>Voltar para a home</a>
+      <Link href='/'>Voltar para a home</Link>
     </div>
   )
 }
