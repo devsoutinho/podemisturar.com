@@ -8,6 +8,20 @@ export function getStaticPaths() {
   }
 }
 
+// https://app.graphcms.com/ba2c3bca72f34da980248a473d6de5c6/master/graphiql
+/*
+query {
+  cantCombines(where: {items_some: {name: "Cloro"}}) {
+    id
+    name
+    items {
+      name 
+    }
+    description
+  }
+}
+
+*/
 export function getStaticProps({ params }) {
   if(!params.combination) return { notFound: true };
 
