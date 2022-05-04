@@ -26,7 +26,7 @@ query {
 export function getStaticProps({ params }) {
   if(!params.combination) return { notFound: true };
 
-  const items = params.combination.split('-com-');
+  const items = params.combination.split('-com-').map((item) => item.replaceAll('-', ' ').trim());
 
   return {
     props: {

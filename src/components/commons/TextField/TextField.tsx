@@ -13,9 +13,8 @@ function withAutoComplete(props: any) {
       id="combo-box-demo"
       options={options}
       sx={{ width: 300 }}
-      isOptionEqualToValue={(option: any, value: any) => option.label === value.label}
       onChange={(_, newValue: any) => {
-        onChange({ target: { value: newValue?.label, name }, type: 'change' });
+        onChange({ target: { value: newValue, name }, type: 'change' });
       }}
       value={value}
       renderInput={children}
