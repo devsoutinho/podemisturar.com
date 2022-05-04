@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { useForm } from '@src/components/forms/useForm/useForm';
 import { pageHOC } from '@src/components/pageHOC/pageHOC';
+import Button from '@src/components/commons/Button/Button';
 
 export default pageHOC(HomePage, {
   title: 'Home',
@@ -39,9 +40,7 @@ function HomePage() {
           value={form.values.coisa2}
         />
         <div>
-          <button>
-            Checar 👀
-          </button>
+          <Button type="submit" label="Checar 👀" />
         </div>
       </form>
     </main>

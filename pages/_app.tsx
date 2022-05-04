@@ -4,6 +4,27 @@ import { useRouter } from 'next/router';
 import Script from 'next/script';
 import { globalConfig } from '@src/globalConfig';
 import { gtmPageview } from '@src/utils/events/pageview';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider } from '@mui/material/styles';
+
+import { createTheme } from '@mui/material/styles';
+import { red } from '@mui/material/colors';
+
+// Create a theme instance.
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#556cd6',
+    },
+    secondary: {
+      main: '#19857b',
+    },
+    error: {
+      main: red.A400,
+    },
+  },
+});
+
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter()
@@ -35,7 +56,10 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           font-family: sans-serif;
         }     
       `}</style>
-      <Component {...pageProps} />
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Component {...pageProps} />
+      </ThemeProvider>
     </>
   )
 }
