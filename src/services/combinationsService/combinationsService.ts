@@ -2,10 +2,15 @@ const GRAPH_CMS_TOKEN = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImdjbXMtbWF
 
 export function combinationsService() {
   return {
+    async getCombinationOf(item1, item2) {
+      const result = await this.getCombinationsOf(item1);
+
+      return result.cantCombines;
+    },
     async getCombinationsOf(itemName) {
       const query = `
         query($itemName: String!) {
-          cantCombines(where: {items_some: {name: $itemName}}) {
+          cantCombines(where: {items_some: {name_contains: $itemName}}) {
             id
             name
             items {
@@ -32,10 +37,7 @@ export function combinationsService() {
       .then(async (res) => {
         const data = await res.json();
         return data;
-      })
-
-      console.log(combinationsData);
-
+      });
       return combinationsData.data;      
     },
     async getAllItems() {
