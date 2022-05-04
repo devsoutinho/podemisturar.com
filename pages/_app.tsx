@@ -37,6 +37,19 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
+      <style global jsx>{`
+        html {
+          display: flex;
+          flex-direction: column;
+          min-height: 100vh;
+        }
+        #__next,
+        body {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+        }
+      `}</style>
       {/* Google Tag Manager - Global base code */}
       <Script
         id="gtag-base"
@@ -51,11 +64,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           `,
         }}
       />
-      <style global jsx>{`
-        body {
-          font-family: sans-serif;
-        }     
-      `}</style>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Component {...pageProps} />

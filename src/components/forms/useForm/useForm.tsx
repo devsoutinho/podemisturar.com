@@ -7,7 +7,7 @@ export function useForm({
 
   function setValue(event: React.ChangeEvent<HTMLInputElement>) {
     const name = event.target.name;
-    const value = event.target.name;
+    const value = event.target.value;
     setValues((currentValues) => {
       return {
         ...currentValues,
