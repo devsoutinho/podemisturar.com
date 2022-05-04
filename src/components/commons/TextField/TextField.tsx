@@ -13,6 +13,7 @@ function withAutoComplete(props: any) {
       id="combo-box-demo"
       options={options}
       sx={{ width: 300 }}
+      noOptionsText="Nenhuma combinação encontrada"
       onChange={(_, newValue: any) => {
         onChange({ target: { value: newValue, name }, type: 'change' });
       }}
