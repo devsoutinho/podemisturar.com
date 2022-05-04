@@ -5,7 +5,7 @@ export function useForm({
 }) {
   const [values, setValues] = React.useState(initialValues);
 
-  function setValue(event: React.ChangeEvent<HTMLInputElement>) {
+  function setValue(event: any) {
     const name = event.target.name;
     const value = event.target.value;
     setValues((currentValues) => {
@@ -18,6 +18,7 @@ export function useForm({
 
   return {
     values,
-    setValue
+    setValue,
+    isInvalid: Object.keys(values).some((key) => !values[key])
   };
 }

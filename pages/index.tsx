@@ -1,1 +1,1 @@
-export { default } from '@src/screens/HomeScreen/HomeScreen';
+export { default, getStaticProps } from '@src/screens/HomeScreen/HomeScreen';
