@@ -1,3 +1,4 @@
+import React from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from '@src/components/forms/useForm/useForm';
 import { pageHOC } from '@src/components/pageHOC/pageHOC';
@@ -6,24 +7,12 @@ import { TextField } from '@src/components/commons/TextField/TextField';
 import { Text } from '@src/components/commons/Text/Text';
 import { Box } from '@src/components/commons/Box/Box';
 import { combinationsService } from '@src/services/combinationsService/combinationsService';
-import React from 'react';
-
-// slugify
-function slugify(text) {
-  return text
-    .toString()
-    .toLowerCase()
-    .replace(/\s+/g, '-')
-    // .replace(/[^\w-]+/g, '')
-    .replace(/--+/g, '-')
-    .replace(/^-+/, '')
-    .replace(/-+$/, '');
-}
+import { slugify } from '@src/utils/string/slugify/slugify';
 
 export async function getStaticProps() {
   return {
     props: {
-      options: await combinationsService().getAllItems(),
+      initialItems: await combinationsService().getAllItems(),
     }
   }
 }
@@ -33,34 +22,23 @@ export default pageHOC(HomePage, {
   description: 'Página Inicial',
 });
 
-function HomePage({ options }) {
+function HomePage({ initialItems }) {
   const router = useRouter();
-  const form = useForm({
-    initialValues: {
-      coisa1: '',
-      coisa2: '',
-    }
-  });
-  const [combinationOptions, setCombinationOptions] = React.useState([]);
+  const [combinations, setCombinations] = React.useState([]);
+  const form = useForm({ initialValues: { item: '', itemCombination: '', } });
+  const combinationOptions = combinationsService()
+    .reduceCombinationsToSelection(combinations, form.values.item);
 
   React.useEffect(() => {
-    combinationsService()
-      .getCombinationsOf(form.values.coisa1)
-      .then((result) => {
-        const partialCombinations = result
-          .cantCombines
-          .map((combinations) => combinations.items)
-          .flatMap((items) => items)
-          .map((item) => item.name)
-          .filter((item) => item.toLowerCase() !== form.values.coisa1.toLowerCase());
-        
-        if(partialCombinations.length) {
-          setCombinationOptions(Array.from(new Set([...partialCombinations, ''])));
-        } else {
-          setCombinationOptions([]);
-        }
-      });
-  }, [form.values.coisa1]);
+    const item = initialItems.find((item) => item.title === form.values.item);
+    if(item) {
+      combinationsService()
+        .getCombinationsOf(item.id)
+        .then((combinationsFromServer) => {
+          setCombinations(combinationsFromServer);
+        });
+    }
+  }, [form.values.item]);
 
   return (
     <Box
@@ -76,37 +54,44 @@ function HomePage({ options }) {
       <Text tag="h1" variant="heading2" styleSheet={{ marginBottom: { xs: '10px', sm: '30px' } }}>
         Pode misturar?
       </Text>
-      <form onSubmit={(event: React.ChangeEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const { coisa1, coisa2 } = form.values;
-        const combinationUrl = '/combina/' + slugify(coisa1) + '-com-' + slugify(coisa2);
-        router.push(combinationUrl);
-      }}>
+      <Box
+        tag="form"
+        styleSheet={{
+          minWidth: '300px',
+        }}
+        onSubmit={(event: React.ChangeEvent<HTMLFormElement>) => {
+          event.preventDefault();
+          const item = initialItems.find((i) => i.title === form.values.item).slug;
+          const itemCombination = initialItems.find((i) => i.title === form.values.itemCombination).slug;
+          const combinationUrl = '/combina/' + item + '-com-' + itemCombination;
+          router.push(combinationUrl);
+        }}
+      >
         <TextField
           label='Primeira Coisa'
-          name="coisa1"
+          name="item"
           onChange={(event) => {
-            form.setValue({ target: { name: 'coisa2', value: '' } });
+            form.setValue({ target: { name: 'itemCombination', value: '' } });
             form.setValue(event);
           }}
-          value={form.values.coisa1}
+          value={form.values.item}
           autocomplete
-          options={options}
+          options={initialItems?.map((item) => item.title)}
         />
         <p>Com</p>
         <TextField
           label='Segunda Coisa'
-          name="coisa2"
+          name="itemCombination"
           onChange={form.setValue}
-          value={form.values.coisa2}
+          value={form.values.itemCombination}
           autocomplete
           options={combinationOptions}
-          disabled={!form.values.coisa1}
+          disabled={!form.values.item}
         />
         <div>
           <Button type="submit" label="Checar 👀" styleSheet={{ marginTop: { xs: '10px' } }} disabled={form.isInvalid} />
         </div>
-      </form>
+      </Box>
     </Box>
   )
 }

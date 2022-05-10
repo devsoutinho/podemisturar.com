@@ -5,12 +5,14 @@ interface BoxProps {
   tag?: string;
   children: React.ReactNode;
   styleSheet?: Record<string,any>;
+  onSubmit?: any;
 }
-export function Box({ tag, styleSheet, children }: BoxProps) {
+export function Box({ tag, styleSheet, children, ...props }: BoxProps) {
   return (
     <MaterialBox
       component={tag as unknown as any}
       sx={styleSheet}
+      {...props}
     >
       {children}
     </MaterialBox>

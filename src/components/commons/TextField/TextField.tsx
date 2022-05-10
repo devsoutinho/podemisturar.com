@@ -11,8 +11,8 @@ function withAutoComplete(props: any) {
       disablePortal
       disableClearable
       id="combo-box-demo"
-      options={options}
-      sx={{ width: 300 }}
+      options={['',...options]}
+      sx={{ width: '100%' }}
       noOptionsText="Nenhuma combinação encontrada"
       onChange={(_, newValue: any) => {
         onChange({ target: { value: newValue, name }, type: 'change' });
