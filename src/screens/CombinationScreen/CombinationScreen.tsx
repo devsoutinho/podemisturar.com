@@ -31,9 +31,18 @@ export async function getStaticProps({ params }) {
 export default pageHOC(CombineScreen);
 
 function CombineScreen({ combinationResult }) {
+  const title0Alternate = !!combinationResult.combinationOfItems[0]?.alternateTitle.length && `(${combinationResult.combinationOfItems[0]?.alternateTitle.map(i => i.title)})`;
+  const title1Alternate = !!combinationResult.combinationOfItems[1]?.alternateTitle.length && `(${combinationResult.combinationOfItems[1]?.alternateTitle.map(i => i.title)})`;
+  console.log(combinationResult.combinationOfItems[1]?.alternateTitle);
+
+  const title = `
+    Pode misturar ${combinationResult.combinationOfItems[0].title} ${title0Alternate} com ${combinationResult.combinationOfItems[1].title} ${title1Alternate || ''}? 
+  `;
   return (
     <div>
-      <h1>Pode misturar {combinationResult.combinationOfItems[0].title} com {combinationResult.combinationOfItems[1].title}?</h1>
+      <h1>
+        {title}
+      </h1>
       <h2>
         {combinationResult.canCombine ? ('Sim!') : ('Não!')}
         {'  '}

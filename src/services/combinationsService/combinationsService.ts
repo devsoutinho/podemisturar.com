@@ -40,6 +40,11 @@ export function combinationsService() {
                   title
                   id
                   slug
+                  alternateTitle {
+                    id
+                    title
+                    slug
+                  }
                 }
                 reason
                 explanation {
@@ -66,6 +71,11 @@ export function combinationsService() {
                 id
                 title
                 slug
+                alternateTitle {
+                  id
+                  title
+                  slug
+                }
               }
             }
           `,
@@ -76,6 +86,9 @@ export function combinationsService() {
     },
     reduceCombinationsToSelection(combinations = [], selection = '') {
       if(combinations.length === 0) return combinations;
+      
+      console.log('selection', selection);
+
       const result = combinations
       .reduce((acc, item) => {
         return [
@@ -83,12 +96,21 @@ export function combinationsService() {
           ...item.combinationOfItems,
         ]
       }, [])
-      .map((item) => item.title)
-      .filter((item) => item !== selection);
-    
-      console.log('result', result);
-    
-      return result;
+      .map((item) => {
+        const hasAlternateTitleEqualSelection = Boolean(item.alternateTitle.find(i => i.title === selection));
+        console.log(hasAlternateTitleEqualSelection);
+
+        if(hasAlternateTitleEqualSelection) return undefined;
+
+        return item.title;
+      })
+      .filter(Boolean)
+      .filter((item) => {
+        const isDifferentFromSelection = item !== selection;
+        if(isDifferentFromSelection) return true;
+        return false;
+      });
+      return Array.from(new Set(result));
     }
   };
 }

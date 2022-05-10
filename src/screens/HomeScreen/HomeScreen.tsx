@@ -7,7 +7,6 @@ import { TextField } from '@src/components/commons/TextField/TextField';
 import { Text } from '@src/components/commons/Text/Text';
 import { Box } from '@src/components/commons/Box/Box';
 import { combinationsService } from '@src/services/combinationsService/combinationsService';
-import { slugify } from '@src/utils/string/slugify/slugify';
 
 export async function getStaticProps() {
   return {
@@ -30,13 +29,25 @@ function HomePage({ initialItems }) {
     .reduceCombinationsToSelection(combinations, form.values.item);
 
   React.useEffect(() => {
-    const item = initialItems.find((item) => item.title === form.values.item);
+    const item = initialItems.find((item) => {
+      const mainItem = item.title === form.values.item;
+      if(mainItem) return mainItem;
+
+      const mainAlternateItem = item.alternateTitle?.find((alternateTitle) => {
+        return alternateTitle.title === form.values.item;
+      });
+      if(mainAlternateItem) return mainAlternateItem;
+
+      return false;
+    });
     if(item) {
       combinationsService()
         .getCombinationsOf(item.id)
         .then((combinationsFromServer) => {
           setCombinations(combinationsFromServer);
         });
+    } else {
+      setCombinations([]);
     }
   }, [form.values.item]);
 
@@ -61,7 +72,15 @@ function HomePage({ initialItems }) {
         }}
         onSubmit={(event: React.ChangeEvent<HTMLFormElement>) => {
           event.preventDefault();
-          const item = initialItems.find((i) => i.title === form.values.item).slug;
+          const item = initialItems.find((i) => {
+            const mainItem = i.title === form.values.item;
+            if(mainItem) return mainItem;
+
+            const alternateTitleEqualSelection = i.alternateTitle.find(it => it.title === form.values.item);    
+            if(alternateTitleEqualSelection) return alternateTitleEqualSelection;
+
+            return false;
+          }).slug;
           const itemCombination = initialItems.find((i) => i.title === form.values.itemCombination).slug;
           const combinationUrl = '/combina/' + item + '-com-' + itemCombination;
           router.push(combinationUrl);
@@ -76,7 +95,15 @@ function HomePage({ initialItems }) {
           }}
           value={form.values.item}
           autocomplete
-          options={initialItems?.map((item) => item.title)}
+          options={initialItems
+            ?.reduce((acc, item) => {
+              return [
+                ...acc,
+                item,
+                ...item.alternateTitle,
+              ];
+            }, [])
+            .map((item) => item.title)}
         />
         <p>Com</p>
         <TextField
@@ -86,8 +113,9 @@ function HomePage({ initialItems }) {
           value={form.values.itemCombination}
           autocomplete
           options={combinationOptions}
-          disabled={!form.values.item}
+          disabled={!form.values.item || !combinationOptions.length}
         />
+        {form.values.item && !combinationOptions.length && <p>Nenhuma combinação encontrada :(</p>}
         <div>
           <Button type="submit" label="Checar 👀" styleSheet={{ marginTop: { xs: '10px' } }} disabled={form.isInvalid} />
         </div>
