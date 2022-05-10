@@ -36,7 +36,7 @@ function CombineScreen({ combinationResult }) {
   console.log(combinationResult.combinationOfItems[1]?.alternateTitle);
 
   const title = `
-    Pode misturar ${combinationResult.combinationOfItems[0].title} ${title0Alternate} com ${combinationResult.combinationOfItems[1].title} ${title1Alternate || ''}? 
+    Pode misturar ${combinationResult.combinationOfItems[0].title} ${title0Alternate || ''} com ${combinationResult.combinationOfItems[1].title} ${title1Alternate || ''}? 
   `;
   return (
     <div>
