@@ -10,6 +10,8 @@ import { Box } from '@src/components/commons/Box/Box';
 import { combinationsService } from '@src/services/combinationsService/combinationsService';
 import { Footer } from '@src/components/patterns/Footer/Footer';
 import { Logo } from '@src/components/Logo/Logo';
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 export async function getStaticProps() {
   return {
@@ -20,12 +22,13 @@ export async function getStaticProps() {
 }
 
 export default pageHOC(HomePage, {
-  title: 'Home',
-  description: 'Página Inicial',
+  title: 'PodeMisturar? - Home',
+  description: 'Na hora de comer ou limpar, o app que vai ajudar você a não fazer misturas perigosas para sua saúde!',
 });
 
 function HomePage({ initialItems }) {
   const router = useRouter();
+  const [formSubmited, setFormSubmited] = React.useState(false);
   const [combinations, setCombinations] = React.useState([]);
   const form = useForm({ initialValues: { item: '', itemCombination: '', } });
   const combinationOptions = combinationsService()
@@ -34,16 +37,16 @@ function HomePage({ initialItems }) {
   React.useEffect(() => {
     const item = initialItems.find((item) => {
       const mainItem = item.title === form.values.item;
-      if(mainItem) return mainItem;
+      if (mainItem) return mainItem;
 
       const mainAlternateItem = item.alternateTitle?.find((alternateTitle) => {
         return alternateTitle.title === form.values.item;
       });
-      if(mainAlternateItem) return mainAlternateItem;
+      if (mainAlternateItem) return mainAlternateItem;
 
       return false;
     });
-    if(item) {
+    if (item) {
       combinationsService()
         .getCombinationsOf(item.id)
         .then((combinationsFromServer) => {
@@ -58,15 +61,16 @@ function HomePage({ initialItems }) {
     event.preventDefault();
     const item = initialItems.find((i) => {
       const mainItem = i.title === form.values.item;
-      if(mainItem) return mainItem;
+      if (mainItem) return mainItem;
 
-      const alternateTitleEqualSelection = i.alternateTitle.find(it => it.title === form.values.item);    
-      if(alternateTitleEqualSelection) return alternateTitleEqualSelection;
+      const alternateTitleEqualSelection = i.alternateTitle.find(it => it.title === form.values.item);
+      if (alternateTitleEqualSelection) return alternateTitleEqualSelection;
 
       return false;
     }).slug;
+    setFormSubmited(true);
     const itemCombination = initialItems.find((i) => i.title === form.values.itemCombination).slug;
-    const combinationUrl = '/combina/' + item + '-com-' + itemCombination;
+    const combinationUrl = '/combina/' + item + '--com--' + itemCombination;
     router.push(combinationUrl);
   }
 
@@ -134,16 +138,19 @@ function HomePage({ initialItems }) {
             disabled={!form.values.item || !combinationOptions.length}
           />
           {form.values.item && !combinationOptions.length && <p>Nenhuma combinação encontrada :(</p>}
-          <div>
+          <Box>
             <Button
               type="submit"
               label="Checar 👀"
-              styleSheet={{ marginTop: { xs: '30px' } }}
+              styleSheet={{ marginTop: '30px' }}
               disabled={form.isInvalid}
               fullWidth
               size='large'
             />
-          </div>
+          </Box>
+          {formSubmited && (<Box styleSheet={{ marginTop: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <CircularProgress />
+          </Box>)}
         </Box>
       </Box>
 

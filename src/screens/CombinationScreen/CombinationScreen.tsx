@@ -1,4 +1,5 @@
 import { StructuredText } from "react-datocms";
+import { Head } from '@src/components/Head/Head';
 import theme from '@src/theme/defaultTheme';
 import { Box } from '@src/components/commons/Box/Box';
 import { Link } from '@src/components/Link/Link';
@@ -20,7 +21,7 @@ export function getStaticPaths() {
 export async function getStaticProps({ params }) {
   if (!params.combination) return { notFound: true };
 
-  const items = params.combination.split('-com-');
+  const items = params.combination.split('--com--');
   const combinationResult = await combinationsService().getCombinationOf(items[0], items[1]);
 
   if (!combinationResult) return { notFound: true };
@@ -44,7 +45,10 @@ function CombineScreen({ combinationResult }) {
   const title = `
     Pode misturar ${combinationResult.combinationOfItems[0].title} ${title0Alternate || ''} com ${combinationResult.combinationOfItems[1].title} ${title1Alternate || ''}? 
   `;
+  const canCombine = (combinationResult.canCombine ? ('Sim, pode!') : ('Não pode!')) + ` ${combinationResult.reason}`;
   return (
+    <>
+    <Head title={title} description={canCombine} />
     <Box
       tag="main"
       styleSheet={{
@@ -72,10 +76,9 @@ function CombineScreen({ combinationResult }) {
           {title}
         </Text>
         <Text tag="h2" variant='heading4'>
-          {combinationResult.canCombine ? ('Sim, pode!') : ('Não pode!')}
-          {'  '}
-          {combinationResult.reason}
+          {canCombine}
         </Text>
+          
 
         <StructuredText data={combinationResult.explanation} />
         <Link href='/' styleSheet={{ display: 'inline-flex' }}><Icon>arrow_back_icon</Icon> Voltar para a home</Link>
@@ -83,5 +86,6 @@ function CombineScreen({ combinationResult }) {
 
       <Footer />
     </Box>
+    </>
   )
 }
