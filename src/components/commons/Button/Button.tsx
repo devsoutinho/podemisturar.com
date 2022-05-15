@@ -4,7 +4,9 @@ interface ButtonProps {
   type?: 'button' | 'submit' | 'reset';
   label: string;
   styleSheet?: Record<string,any>;
-  disabled: boolean;
+  disabled?: boolean;
+  fullWidth?: boolean;
+  size?: 'small' | 'medium' | 'large';
 }
 export function Button({ type, label, styleSheet, ...props }: ButtonProps) {
   return (

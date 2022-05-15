@@ -49,6 +49,16 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           display: flex;
           flex-direction: column;
         }
+
+        a {
+          opacity: 1;
+          transition: .2s ease-in-out;
+          text-decoration: none;
+        }
+        a:hover,
+        a:focus {
+          opacity: .5;
+        }
       `}</style>
       {/* Google Tag Manager - Global base code */}
       <Script

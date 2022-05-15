@@ -1,5 +1,5 @@
 import { StructuredText } from "react-datocms";
-import Link from '@src/components/Link/Link';
+import { Link } from '@src/components/Link/Link';
 import { pageHOC } from '@src/components/pageHOC/pageHOC';
 import { combinationsService } from '@src/services/combinationsService/combinationsService';
 
