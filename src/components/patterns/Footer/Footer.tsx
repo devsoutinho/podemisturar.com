@@ -18,10 +18,10 @@ export function Footer() {
         flexDirection: 'column',
       }}
     >
-      <Text tag="p" variant='body2' styleSheet={{ marginBottom: '10px' }}>
+      <Text tag="p" variant='body2' styleSheet={{ fontSize: '14px', marginBottom: '10px' }}>
         Todos os direitos reservados © {new Date().getFullYear()}
       </Text>
-      <Text tag="p" variant='body2'>
+      <Text tag="p" variant='body2' styleSheet={{ fontSize: '14px' }}>
         Uma parceria entre 
         {' '}
         <Link href="https://www.youtube.com/channel/UCdKJlY5eAoSumIlcOcYxIGg" styleSheet={{ color: theme.colors.accent.x200 }}>

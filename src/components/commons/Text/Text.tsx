@@ -27,8 +27,8 @@ export const Text = React.forwardRef(({ tag, variant, styleSheet, children, ...p
       component={tag}
       variant={typographyVariantsMap[variant] as unknown as any}
       sx={{
-        ...styleSheet,
         ...theme.typography.variants[variant],
+        ...styleSheet,
       }}
     >
       {children}

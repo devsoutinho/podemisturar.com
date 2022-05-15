@@ -9,7 +9,16 @@ interface LinkProps {
 export function Link({ href, children, ...props }: LinkProps) {
   return (
     <NextLink href={href} passHref>
-      <Text tag="a" {...props}>
+      <Text
+        tag="a"
+        {...props}
+        styleSheet={{
+          fontSize: 'inherit',
+          fontWeight: 'inherit',
+          lineHeight: 'inherit',
+          ...props.styleSheet,
+        }}
+      >
         {children}
       </Text>
     </NextLink>
