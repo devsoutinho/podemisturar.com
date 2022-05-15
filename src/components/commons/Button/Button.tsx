@@ -7,6 +7,7 @@ interface ButtonProps {
   disabled?: boolean;
   fullWidth?: boolean;
   size?: 'small' | 'medium' | 'large';
+  href?: string;
 }
 export function Button({ type, label, styleSheet, ...props }: ButtonProps) {
   return (
