@@ -33,6 +33,12 @@ export function Footer() {
         <Link href="https://www.youtube.com/DevSoutinho" styleSheet={{ color: theme.colors.accent.x200 }}>
           Mario Souto (DevSoutinho)
         </Link>
+        {' '}
+        Ver mais 
+        {' '}
+        <Link href="/sobre" styleSheet={{ color: theme.colors.accent.x200 }}>
+        sobre o projeto aqui
+        </Link>
       </Text>
     </Box>
   );
