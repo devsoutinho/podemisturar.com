@@ -38,8 +38,8 @@ export async function getStaticProps({ params }) {
 export default pageHOC(CombineScreen);
 
 function CombineScreen({ combinationResult }) {
-  const title0Alternate = !!combinationResult.combinationOfItems[0]?.alternateTitle.length && `(${combinationResult.combinationOfItems[0]?.alternateTitle.map(i => i.title)})`;
-  const title1Alternate = !!combinationResult.combinationOfItems[1]?.alternateTitle.length && `(${combinationResult.combinationOfItems[1]?.alternateTitle.map(i => i.title)})`;
+  const title0Alternate = !!combinationResult.combinationOfItems[0]?.alternateTitle.length && `(${combinationResult.combinationOfItems[0]?.alternateTitle.map(i => i.title).join(', ')})`;
+  const title1Alternate = !!combinationResult.combinationOfItems[1]?.alternateTitle.length && `(${combinationResult.combinationOfItems[1]?.alternateTitle.map(i => i.title).join(', ')})`;
   console.log(combinationResult.combinationOfItems[1]?.alternateTitle);
 
   const title = `
