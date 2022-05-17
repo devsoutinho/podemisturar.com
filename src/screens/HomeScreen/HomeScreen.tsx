@@ -70,7 +70,8 @@ function HomePage({ initialItems }) {
     }).slug;
     setFormSubmited(true);
     const itemCombination = initialItems.find((i) => i.title === form.values.itemCombination).slug;
-    const combinationUrl = '/combina/' + item + '--com--' + itemCombination;
+    const valuesPure = Object.entries(form.values).reduce((acc,[key, value]) => `${acc}${key}=${value}&`, '').slice(0, -1);
+    const combinationUrl = '/combina/' + item + '--com--' + itemCombination + '?' + valuesPure;
     router.push(combinationUrl);
   }
 

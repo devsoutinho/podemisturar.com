@@ -1,4 +1,5 @@
 import { StructuredText } from "react-datocms";
+import { useRouter } from 'next/router';
 import { Head } from '@src/components/Head/Head';
 import theme from '@src/theme/defaultTheme';
 import { Box } from '@src/components/commons/Box/Box';
@@ -29,6 +30,7 @@ export async function getStaticProps({ params }) {
 
   return {
     props: {
+
       combinationResult,
     },
     revalidate: 10,
@@ -40,11 +42,14 @@ export default pageHOC(CombineScreen);
 function CombineScreen({ combinationResult }) {
   const title0Alternate = !!combinationResult.combinationOfItems[0]?.alternateTitle.length && `(${combinationResult.combinationOfItems[0]?.alternateTitle.map(i => i.title).join(', ')})`;
   const title1Alternate = !!combinationResult.combinationOfItems[1]?.alternateTitle.length && `(${combinationResult.combinationOfItems[1]?.alternateTitle.map(i => i.title).join(', ')})`;
-  console.log(combinationResult.combinationOfItems[1]?.alternateTitle);
-
   const title = `
     Pode misturar ${combinationResult.combinationOfItems[0].title} ${title0Alternate || ''} com ${combinationResult.combinationOfItems[1].title} ${title1Alternate || ''}? 
   `;
+  
+  const router = useRouter();
+  const pageTitle = router.query.item 
+    ? `Pode misturar ${router.query.item} com ${router.query.itemCombination} ?`
+    : '';
   console.log('combinationResult.canCombine', combinationResult.canCombine);
   
   let canCombine: string;
@@ -79,7 +84,8 @@ function CombineScreen({ combinationResult }) {
           <Logo />
         </Box>
         <Text tag="h1" variant='heading3' styleSheet={{ marginBottom: '40px' }}>
-          {title}
+          {pageTitle && pageTitle}
+          {!pageTitle && 'Carregando...'}
         </Text>
         <Text tag="h2" variant='heading4'>
           {canCombine}
