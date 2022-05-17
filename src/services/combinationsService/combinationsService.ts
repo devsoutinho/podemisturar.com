@@ -34,7 +34,7 @@ export function combinationsService() {
         body: JSON.stringify({
           query: `
             query ($itemId: [ItemId]) {
-              allCombinations(filter: {combinationOfItems: {allIn: $itemId}}) {
+              allCombinations(first: 100, filter: {combinationOfItems: {allIn: $itemId}}) {
                 canCombine
                 combinationOfItems {
                   title
@@ -67,7 +67,7 @@ export function combinationsService() {
         body: JSON.stringify({
           query: `
             query {
-              allItems {
+              allItems(first: 100) {
                 id
                 title
                 slug

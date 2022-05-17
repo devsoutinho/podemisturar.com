@@ -45,7 +45,13 @@ function CombineScreen({ combinationResult }) {
   const title = `
     Pode misturar ${combinationResult.combinationOfItems[0].title} ${title0Alternate || ''} com ${combinationResult.combinationOfItems[1].title} ${title1Alternate || ''}? 
   `;
-  const canCombine = (combinationResult.canCombine ? ('Sim, pode!') : ('Não pode!')) + ` ${combinationResult.reason}`;
+  console.log('combinationResult.canCombine', combinationResult.canCombine);
+  
+  let canCombine: string;
+  if(combinationResult.canCombine === 'Depende') canCombine = `Depende! ${combinationResult.reason}`;
+  if(combinationResult.canCombine === 'Sim') canCombine = `Sim, pode! ${combinationResult.reason}`;
+  if(combinationResult.canCombine === 'Não') canCombine = `Não pode! ${combinationResult.reason}`;
+
   return (
     <>
     <Head title={title} description={canCombine} />
